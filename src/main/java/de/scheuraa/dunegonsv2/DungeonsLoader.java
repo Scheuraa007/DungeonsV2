@@ -1,5 +1,6 @@
 package de.scheuraa.dunegonsv2;
 
+import de.scheuraa.dunegonsv2.commands.CommandManager;
 import lombok.Getter;
 
 @Getter
@@ -17,7 +18,8 @@ public class DungeonsLoader {
     }
 
     public void initCommands(){
-
+        CommandManager commandManager = new CommandManager();
+        commandManager.setUp();
     }
 
     public void initEvents(){
