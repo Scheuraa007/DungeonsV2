@@ -1,21 +1,11 @@
-package de.scheuraa.dunegonsv2.commands;
+package de.scheuraa.dunegonsv2.commands.raritycommands;
 
 import de.scheuraa.dunegonsv2.utils.SubCommand;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class RarityCommand extends SubCommand {
-
-
-    private ArrayList<SubCommand> subCommands = new ArrayList<>();
-
-    public RarityCommand() {
-        //Adde SubCommands von Rarity
-    }
-
+public class AddRarity extends SubCommand {
     @Override
     public void perform(Player player, String[] args) {
 
@@ -23,17 +13,17 @@ public class RarityCommand extends SubCommand {
 
     @Override
     public String getName() {
-        return "rarity";
+        return "add";
     }
 
     @Override
     public String getDescription() {
-        return "Rarity Command for Raritys";
+        return "Fügt eine Rarity hinzu";
     }
 
     @Override
     public String getSyntax() {
-        return "/dungeons rarity";
+        return "/dungeons rarity add";
     }
 
     @Override
@@ -43,9 +33,6 @@ public class RarityCommand extends SubCommand {
 
     @Override
     public ArrayList<String> getSubCommandArguments(String[] args) {
-
         return null;
     }
-
-
 }

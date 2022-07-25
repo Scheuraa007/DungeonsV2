@@ -52,7 +52,7 @@ public class CommandManager implements TabExecutor {
            arrayList.addAll(Arrays.asList(args));
            arrayList.remove(0);
            try{
-               target.perform(player, args);
+               target.perform(player, (String[])arrayList.toArray());
            }catch (Exception e){
                e.printStackTrace();
                sendInfo(player);
@@ -94,9 +94,11 @@ public class CommandManager implements TabExecutor {
                 subCommandsArgs.add(commands.get(i).getName());
             }
             return subCommandsArgs;
-        }else if ((args.length == 2)){
+        }else if ((args.length >= 2)){
             for(int i = 0; i<commands.size();i++){
-
+                if(commands.get(i).getName().equalsIgnoreCase(args[1])){
+                    return commands.get(i).getSubCommandArguments(args);
+                }
             }
         }
         return null;

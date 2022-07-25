@@ -21,5 +21,5 @@ public abstract class SubCommand {
 
     public abstract String[] aliases();
 
-    public abstract ArrayList<String> getSubCommandArguemnts(Player player, String[] args);
+    public abstract ArrayList<String> getSubCommandArguments(String[] args);
 }
