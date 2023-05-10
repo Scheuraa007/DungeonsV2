@@ -1,7 +1,7 @@
 package de.scheuraa.dunegonsv2;
 
 import de.scheuraa.dunegonsv2.commands.CommandManager;
-import de.scheuraa.dunegonsv2.utils.MySQLConnector;
+import de.scheuraa.dunegonsv2.database.MySQLConnector;
 import de.scheuraa.dunegonsv2.utils.Var;
 import lombok.Getter;
 
@@ -14,24 +14,25 @@ public class DungeonsLoader {
         this.dungeonsPlugin = dungeonsPlugin;
     }
 
-    public void init(){
+    public void init() {
         dungeonsPlugin.saveDefaultConfig();
-        new Var();
+        Var.initVar();
         new MySQLConnector();
+        Var.getRarityTable().loadAllRarities();
         initCommands();
         initEvents();
     }
 
-    public void initCommands(){
+    public void initCommands() {
         CommandManager commandManager = new CommandManager();
         commandManager.setUp();
     }
 
-    public void initEvents(){
+    public void initEvents() {
 
     }
 
-    public void unload(){
+    public void unload() {
 
     }
 }

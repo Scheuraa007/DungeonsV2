@@ -1,6 +1,5 @@
 package de.scheuraa.dunegonsv2;
 
-import de.scheuraa.dunegonsv2.utils.MySQLConnector;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,6 +8,7 @@ public class DungeonsPlugin extends JavaPlugin {
     @Getter
     private static DungeonsPlugin dungeonsPlugin;
     private DungeonsLoader loader;
+
     @Override
     public void onEnable() {
         dungeonsPlugin = this;

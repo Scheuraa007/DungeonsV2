@@ -14,32 +14,32 @@ public class ConfigManager {
 
     private FileConfiguration dataConfig = null;
     private File configFile = null;
-    private DungeonsPlugin plugin = DungeonsPlugin.getDungeonsPlugin();
+    private final DungeonsPlugin plugin = DungeonsPlugin.getDungeonsPlugin();
 
     public ConfigManager() {
         saveDefaultConfig();
     }
 
-    public void reloadConfig(){
-        if(this.configFile ==null){
-            this.configFile = new File(this.plugin.getDataFolder(),"config.yml");
+    public void reloadConfig() {
+        if (this.configFile == null) {
+            this.configFile = new File(this.plugin.getDataFolder(), "config.yml");
         }
         this.dataConfig = YamlConfiguration.loadConfiguration(this.configFile);
 
         InputStream defaultStream = this.plugin.getResource("config.yml");
 
-        if(defaultStream !=null){
+        if (defaultStream != null) {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.dataConfig.setDefaults(defaultConfig);
         }
     }
 
-    public FileConfiguration getConfig(){
+    public FileConfiguration getConfig() {
         return this.dataConfig;
     }
 
-    public void saveConfig(){
-        if(this.dataConfig ==null || this.configFile == null){
+    public void saveConfig() {
+        if (this.dataConfig == null || this.configFile == null) {
             try {
                 this.getConfig().save(this.configFile);
             } catch (IOException e) {
@@ -48,12 +48,12 @@ public class ConfigManager {
         }
     }
 
-    public void saveDefaultConfig(){
-        if(this.configFile ==null){
-            this.configFile = new File(this.plugin.getDataFolder(),"config.yml");
+    public void saveDefaultConfig() {
+        if (this.configFile == null) {
+            this.configFile = new File(this.plugin.getDataFolder(), "config.yml");
         }
-        if(!this.configFile.exists()){
-            this.plugin.saveResource("config.yml",false);
+        if (!this.configFile.exists()) {
+            this.plugin.saveResource("config.yml", false);
         }
     }
 }

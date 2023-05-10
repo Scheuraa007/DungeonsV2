@@ -1,6 +1,7 @@
 package de.scheuraa.dunegonsv2.commands;
 
 import de.scheuraa.dunegonsv2.DungeonsPlugin;
+import de.scheuraa.dunegonsv2.commands.raritycommands.RarityCommand;
 import de.scheuraa.dunegonsv2.utils.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -8,10 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class CommandManager implements TabExecutor {
 
@@ -22,59 +20,55 @@ public class CommandManager implements TabExecutor {
 
     }
 
-    public void setUp(){
-        DungeonsPlugin.getDungeonsPlugin().getCommand("dungeons").setExecutor(this);
+    public void setUp() {
+        Objects.requireNonNull(DungeonsPlugin.getDungeonsPlugin().getCommand("dungeons")).setExecutor(this);
         this.commands.add(new RarityCommand());
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 
-       if(!(sender instanceof Player)){
-           sender.sendMessage(ChatColor.RED + "Dieser Command ist nur für Spieler ausgelegt!");
-           return true;
-       }
-       Player player = (Player) sender;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Dieser Command ist nur für Spieler ausgelegt!");
+            return true;
+        }
+        Player player = (Player) sender;
 
-       if(command.getName().equalsIgnoreCase("dungeons")){
-           if(args.length==0){
-               sendInfo(player);
-               return true;
-           }
-           SubCommand target = this.get(args[0]);
+        if (command.getName().equalsIgnoreCase("dungeons")) {
+            if (args.length == 0) {
+                sendInfo(player);
+                return true;
+            }
+            SubCommand target = this.get(args[0]);
 
-           if(target ==null){
-               sendInfo(player);
-               return true;
-           }
+            if (target == null) {
+                sendInfo(player);
+                return true;
+            }
 
-           ArrayList<String> arrayList = new ArrayList<String>();
-
-           arrayList.addAll(Arrays.asList(args));
-           arrayList.remove(0);
-           try{
-               target.perform(player, (String[])arrayList.toArray());
-           }catch (Exception e){
-               e.printStackTrace();
-               sendInfo(player);
-           }
-       }
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
+            arrayList.remove(0);
+            try {
+                target.perform(player, arrayList.toArray(new String[0]));
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendInfo(player);
+            }
+        }
         return true;
     }
 
-    private SubCommand get(String name){
-        Iterator<SubCommand> subCommands = this.commands.iterator();
-
-        while(subCommands.hasNext()){
-            SubCommand subCommand = subCommands.next();
-            if(subCommand.getName().equalsIgnoreCase(name)){
+    private SubCommand get(String name) {
+        for (SubCommand subCommand : this.commands) {
+            if (subCommand.getName().equalsIgnoreCase(name)) {
                 return subCommand;
             }
             String[] aliases;
             int length = (aliases = subCommand.aliases()).length;
 
-            for(int i=0;i<length;++i){
+            for (int i = 0; i < length; ++i) {
                 String alias = aliases[i];
-                if(name.equalsIgnoreCase(alias)){
+                if (name.equalsIgnoreCase(alias)) {
                     return subCommand;
                 }
             }
@@ -82,22 +76,26 @@ public class CommandManager implements TabExecutor {
         return null;
     }
 
-    private void sendInfo(Player player){
+    private void sendInfo(Player player) {
         player.sendMessage(ChatColor.GREEN + "Welcome to DungeonsV2");
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        if (args.length == 1){
-            ArrayList<String> subCommandsArgs = new ArrayList<String>();
-            for(int i = 0; i<commands.size();i++){
-                subCommandsArgs.add(commands.get(i).getName());
+
+        if (args.length == 1) {
+            ArrayList<String> subCommandsArgs = new ArrayList<>();
+            for (SubCommand subCommand : commands) {
+                subCommandsArgs.add(subCommand.getName());
             }
             return subCommandsArgs;
-        }else if ((args.length >= 2)){
-            for(int i = 0; i<commands.size();i++){
-                if(commands.get(i).getName().equalsIgnoreCase(args[1])){
-                    return commands.get(i).getSubCommandArguments(args);
+        } else if ((args.length >= 2)) {
+            for (SubCommand subCommand : commands) {
+                if (subCommand.getName().equalsIgnoreCase(args[0])) {
+                    ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
+                    arrayList.remove(0);
+
+                    return subCommand.getSubCommandArguments(arrayList.toArray(new String[0]));
                 }
             }
         }
