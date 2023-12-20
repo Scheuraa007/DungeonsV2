@@ -1,9 +1,9 @@
-package de.scheuraa.dunegonsv2.database;
+package de.scheuraa.dungeonsv2.database;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import com.mysql.cj.jdbc.MysqlDataSource;
-import de.scheuraa.dunegonsv2.DungeonsPlugin;
-import de.scheuraa.dunegonsv2.utils.Var;
+import de.scheuraa.dungeonsv2.DungeonsPlugin;
+import de.scheuraa.dungeonsv2.utils.Var;
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 

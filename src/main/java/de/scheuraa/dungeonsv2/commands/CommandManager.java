@@ -1,14 +1,14 @@
-package de.scheuraa.dunegonsv2.commands;
+package de.scheuraa.dungeonsv2.commands;
 
-import de.scheuraa.dunegonsv2.DungeonsPlugin;
-import de.scheuraa.dunegonsv2.commands.raritycommands.RarityCommand;
-import de.scheuraa.dunegonsv2.utils.SubCommand;
+import de.scheuraa.dungeonsv2.DungeonsPlugin;
+import de.scheuraa.dungeonsv2.commands.dungeoncommands.DungeonCommand;
+import de.scheuraa.dungeonsv2.commands.raritycommands.RarityCommand;
+import de.scheuraa.dungeonsv2.utils.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-
 import java.util.*;
 
 public class CommandManager implements TabExecutor {
@@ -23,6 +23,7 @@ public class CommandManager implements TabExecutor {
     public void setUp() {
         Objects.requireNonNull(DungeonsPlugin.getDungeonsPlugin().getCommand("dungeons")).setExecutor(this);
         this.commands.add(new RarityCommand());
+        this.commands.add(new DungeonCommand());
     }
 
     @Override
@@ -60,17 +61,25 @@ public class CommandManager implements TabExecutor {
 
     private SubCommand get(String name) {
         for (SubCommand subCommand : this.commands) {
-            if (subCommand.getName().equalsIgnoreCase(name)) {
+            if(checkSubCommandNameWithAlias(name, subCommand)!=null)
+            {
                 return subCommand;
             }
-            String[] aliases;
-            int length = (aliases = subCommand.aliases()).length;
+        }
+        return null;
+    }
 
-            for (int i = 0; i < length; ++i) {
-                String alias = aliases[i];
-                if (name.equalsIgnoreCase(alias)) {
-                    return subCommand;
-                }
+    public static SubCommand checkSubCommandNameWithAlias(String name, SubCommand subCommand) {
+        if (subCommand.getName().equalsIgnoreCase(name)) {
+            return subCommand;
+        }
+        String[] aliases;
+        int length = (aliases = subCommand.aliases()).length;
+
+        for (int i = 0; i < length; ++i) {
+            String alias = aliases[i];
+            if (name.equalsIgnoreCase(alias)) {
+                return subCommand;
             }
         }
         return null;
@@ -83,22 +92,39 @@ public class CommandManager implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 
+        return getSubCommandStrings(args, commands);
+    }
+
+    public static ArrayList<String> getSubCommandStrings(String[] args, ArrayList<SubCommand> subCommands) {
         if (args.length == 1) {
             ArrayList<String> subCommandsArgs = new ArrayList<>();
-            for (SubCommand subCommand : commands) {
+            for (SubCommand subCommand : subCommands) {
                 subCommandsArgs.add(subCommand.getName());
             }
             return subCommandsArgs;
         } else if ((args.length >= 2)) {
-            for (SubCommand subCommand : commands) {
+            for (SubCommand subCommand : subCommands) {
                 if (subCommand.getName().equalsIgnoreCase(args[0])) {
                     ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
                     arrayList.remove(0);
 
                     return subCommand.getSubCommandArguments(arrayList.toArray(new String[0]));
                 }
+
+                String[] aliases;
+                int length = (aliases = subCommand.aliases()).length;
+
+                for (int i = 0; i < length; ++i) {
+                    String alias = aliases[i];
+                    if (alias.equalsIgnoreCase(args[0])) {
+                        ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
+                        arrayList.remove(0);
+
+                        return subCommand.getSubCommandArguments(arrayList.toArray(new String[0]));
+                    }
+                }
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 }

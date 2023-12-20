@@ -1,6 +1,6 @@
-package de.scheuraa.dunegonsv2.utils;
+package de.scheuraa.dungeonsv2.utils;
 
-import de.scheuraa.dunegonsv2.DungeonsPlugin;
+import de.scheuraa.dungeonsv2.DungeonsPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

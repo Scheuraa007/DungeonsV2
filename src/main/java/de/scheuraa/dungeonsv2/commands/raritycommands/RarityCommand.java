@@ -1,6 +1,7 @@
-package de.scheuraa.dunegonsv2.commands.raritycommands;
+package de.scheuraa.dungeonsv2.commands.raritycommands;
 
-import de.scheuraa.dunegonsv2.utils.SubCommand;
+import de.scheuraa.dungeonsv2.commands.CommandManager;
+import de.scheuraa.dungeonsv2.utils.SubCommand;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -15,6 +16,9 @@ public class RarityCommand extends SubCommand {
         //Adde SubCommands von Rarity
         subCommands.add(new AddRarity());
         subCommands.add(new RemoveRarity());
+        subCommands.add(new EditRarity());
+        subCommands.add(new ListRarity());
+        subCommands.add(new InfoRarity());
     }
 
     @Override
@@ -30,7 +34,8 @@ public class RarityCommand extends SubCommand {
             ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
             arrayList.remove(0);
             target.perform(player, arrayList.toArray(new String[0]));
-
+        }else {
+            player.sendMessage(getSyntax());
         }
     }
 
@@ -56,38 +61,15 @@ public class RarityCommand extends SubCommand {
 
     @Override
     public ArrayList<String> getSubCommandArguments(String[] args) {
-        if (args.length == 1) {
-            ArrayList<String> subCommandsArgs = new ArrayList<>();
-            for (SubCommand subCommand : subCommands) {
-                subCommandsArgs.add(subCommand.getName());
-            }
-            return subCommandsArgs;
-        } else if ((args.length >= 2)) {
-            for (SubCommand subCommand : subCommands) {
-                if (subCommand.getName().equalsIgnoreCase(args[0])) {
-                    ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(args));
-                    arrayList.remove(0);
-
-                    return subCommand.getSubCommandArguments(arrayList.toArray(new String[0]));
-                }
-            }
-        }
-        return null;
+        return CommandManager.getSubCommandStrings(args, this.subCommands);
     }
+
 
     private SubCommand get(String name) {
         for (SubCommand subCommand : this.subCommands) {
-            if (subCommand.getName().equalsIgnoreCase(name)) {
+            if(CommandManager.checkSubCommandNameWithAlias(name, subCommand)!=null)
+            {
                 return subCommand;
-            }
-            String[] aliases;
-            int length = (aliases = subCommand.aliases()).length;
-
-            for (int i = 0; i < length; ++i) {
-                String alias = aliases[i];
-                if (name.equalsIgnoreCase(alias)) {
-                    return subCommand;
-                }
             }
         }
         return null;

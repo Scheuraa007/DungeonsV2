@@ -1,4 +1,4 @@
-package de.scheuraa.dunegonsv2;
+package de.scheuraa.dungeonsv2;
 
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;

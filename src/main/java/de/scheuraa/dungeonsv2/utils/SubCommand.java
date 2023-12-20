@@ -1,4 +1,4 @@
-package de.scheuraa.dunegonsv2.utils;
+package de.scheuraa.dungeonsv2.utils;
 
 import org.bukkit.entity.Player;
 

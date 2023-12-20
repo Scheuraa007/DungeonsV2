@@ -2,7 +2,7 @@ name: DungeonsV2
 author: Scheuraa
 version: 1.0
 api-version: 1.19
-main: de.scheuraa.dunegonsv2.DungeonsPlugin
+main: de.scheuraa.dungeonsv2.DungeonsPlugin
 description: DungeonsV2 Plugin
 depend: [ WorldEdit ]
 commands:

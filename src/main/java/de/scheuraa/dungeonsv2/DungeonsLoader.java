@@ -1,9 +1,11 @@
-package de.scheuraa.dunegonsv2;
+package de.scheuraa.dungeonsv2;
 
-import de.scheuraa.dunegonsv2.commands.CommandManager;
-import de.scheuraa.dunegonsv2.database.MySQLConnector;
-import de.scheuraa.dunegonsv2.utils.Var;
+import de.scheuraa.dungeonsv2.commands.CommandManager;
+import de.scheuraa.dungeonsv2.database.MySQLConnector;
+import de.scheuraa.dungeonsv2.listeners.ChunkGenerating;
+import de.scheuraa.dungeonsv2.utils.Var;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 @Getter
 public class DungeonsLoader {
@@ -19,6 +21,7 @@ public class DungeonsLoader {
         Var.initVar();
         new MySQLConnector();
         Var.getRarityTable().loadAllRarities();
+        Var.getDungeonTable().loadAllDungeons();
         initCommands();
         initEvents();
     }
@@ -29,7 +32,7 @@ public class DungeonsLoader {
     }
 
     public void initEvents() {
-
+        Bukkit.getPluginManager().registerEvents(new ChunkGenerating(), dungeonsPlugin);
     }
 
     public void unload() {
